@@ -88,7 +88,7 @@ python test_api.py
 
 ### Hurl 測試
 
-[Hurl](https://hurl.dev/) 是一個命令行工具，用於運行和測試 HTTP 請求。
+[Hurl](https://hurl.dev/) 是一個命令行工具，用於運行和測試 HTTP 請求。詳細的 Hurl 使用說明請參考 [HURL_GUIDE.md](HURL_GUIDE.md)。
 
 #### 安裝 Hurl
 
