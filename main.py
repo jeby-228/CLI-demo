@@ -3,7 +3,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
 from datetime import datetime, timedelta
 import jwt
-from passlib.context import CryptContext
+import bcrypt
 
 app = FastAPI(title="會員登入系統")
 
@@ -11,14 +11,28 @@ SECRET_KEY = "your-secret-key-change-this-in-production"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer()
+
+MAX_BCRYPT_PASSWORD_LENGTH = 72
+
+def clamp_password(password: str) -> str:
+    return password[:MAX_BCRYPT_PASSWORD_LENGTH]
+
+def hash_password(password: str) -> str:
+    password_bytes = clamp_password(password).encode("utf-8")
+    hashed = bcrypt.hashpw(password_bytes, bcrypt.gensalt())
+    return hashed.decode("utf-8")
+
+MAX_BCRYPT_PASSWORD_LENGTH = 72
+
+def clamp_password(password: str) -> str:
+    return password[:MAX_BCRYPT_PASSWORD_LENGTH]
 
 # 模擬資料庫（實際應用中應使用真實資料庫）
 fake_users_db = {
     "user@example.com": {
         "username": "user@example.com",
-        "hashed_password": pwd_context.hash("password123"),
+        "hashed_password": hash_password("password123"),
         "full_name": "測試使用者"
     }
 }
@@ -36,7 +50,8 @@ class User(BaseModel):
     full_name: str
 
 def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+    password_bytes = clamp_password(plain_password).encode("utf-8")
+    return bcrypt.checkpw(password_bytes, hashed_password.encode("utf-8"))
 
 def create_access_token(data: dict):
     to_encode = data.copy()
