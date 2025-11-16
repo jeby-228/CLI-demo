@@ -68,7 +68,9 @@ uvicorn main:app --reload
 
 ## 測試
 
-執行自動化測試：
+### Python 測試
+
+執行 Python 自動化測試：
 ```bash
 python test_api.py
 ```
@@ -83,6 +85,53 @@ python test_api.py
    - 使用有效 Token 取得使用者資訊
    - 使用無效 Token（應被拒絕）
 3. 自動關閉服務器
+
+### Hurl 測試
+
+[Hurl](https://hurl.dev/) 是一個命令行工具，用於運行和測試 HTTP 請求。
+
+#### 安裝 Hurl
+
+在 Ubuntu/Debian 系統上：
+```bash
+curl --location --remote-name https://github.com/Orange-OpenSource/hurl/releases/download/4.3.0/hurl_4.3.0_amd64.deb
+sudo dpkg -i hurl_4.3.0_amd64.deb
+```
+
+或查看 [Hurl 官方安裝文件](https://hurl.dev/docs/installation.html) 了解其他平台。
+
+#### 執行 Hurl 測試
+
+**本地測試（port 8000）：**
+```bash
+# 使用便利腳本
+./run_hurl_tests.sh
+
+# 或手動執行
+python main.py &  # 啟動服務器
+hurl --test --verbose test_api.hurl
+```
+
+**Docker 測試（port 1234）：**
+```bash
+# 使用便利腳本
+./run_hurl_tests.sh docker
+
+# 或手動執行
+docker-compose up -d  # 啟動 Docker 容器
+hurl --test --verbose test_api_docker.hurl
+```
+
+#### Hurl 測試內容
+
+測試文件包含以下測試案例：
+- ✓ 訪問根路徑
+- ✓ 使用正確的帳號密碼登入
+- ✓ 使用錯誤的密碼登入（應被拒絕）
+- ✓ 使用不存在的帳號登入（應被拒絕）
+- ✓ 使用有效 Token 取得使用者資訊
+- ✓ 使用無效 Token（應被拒絕）
+- ✓ 不提供 Token（應被拒絕）
 
 ## 注意事項
 
