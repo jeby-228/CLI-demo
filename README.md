@@ -55,19 +55,66 @@ uvicorn main:app --reload
 
 執行自動化測試：
 ```bash
-python test_api.py
+pytest test_main.py -v
 ```
 
-測試腳本會自動：
-1. 啟動 FastAPI 服務器
-2. 執行以下測試案例：
-   - 訪問根路徑
-   - 正確帳號密碼登入
-   - 錯誤密碼登入（應被拒絕）
-   - 不存在的帳號登入（應被拒絕）
-   - 使用有效 Token 取得使用者資訊
-   - 使用無效 Token（應被拒絕）
-3. 自動關閉服務器
+測試案例包含：
+- 訪問根路徑
+- 正確帳號密碼登入
+- 錯誤密碼登入（應被拒絕）
+- 不存在的帳號登入（應被拒絕）
+- 使用有效 Token 取得使用者資訊
+- 使用無效 Token（應被拒絕）
+
+## CI/CD 流程
+
+本專案已設定 GitHub Actions CI 流程，會在 Pull Request 時自動執行：
+
+### 自動檢查項目
+
+1. **程式碼品質檢查 (Code Quality Checks)**
+   - Black 格式化檢查：確保程式碼符合 PEP 8 風格指南
+   - Flake8 語法檢查：檢測 Python 語法錯誤和程式碼問題
+   - Bandit 安全性掃描：檢查常見的安全漏洞
+
+2. **相依套件漏洞檢查 (Dependency Vulnerability Check)**
+   - pip-audit：掃描 requirements.txt 中的套件是否有已知安全漏洞
+
+3. **自動化測試 (Run Tests)**
+   - 執行所有測試案例
+   - 生成測試覆蓋率報告
+
+### CI 工作流程說明
+
+當您建立或更新 Pull Request 時：
+1. CI 會自動觸發並執行所有檢查
+2. 檢查結果會顯示在 PR 頁面
+3. CI 會自動在 PR 中留言，摘要所有檢查結果
+4. 查看詳細記錄可點擊 Actions 頁籤
+
+### 本地執行 CI 檢查
+
+在提交 PR 前，您可以在本地執行相同的檢查：
+
+```bash
+# 安裝檢查工具
+pip install black flake8 bandit pytest pytest-cov httpx pip-audit
+
+# 格式化檢查
+black --check .
+
+# 語法檢查
+flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+
+# 安全性掃描
+bandit -r . -f screen
+
+# 相依套件漏洞檢查
+pip-audit -r requirements.txt
+
+# 執行測試
+pytest -v --cov=.
+```
 
 ## 注意事項
 
