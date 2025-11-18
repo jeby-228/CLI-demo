@@ -53,6 +53,8 @@ uvicorn main:app --reload
 
 ## 測試
 
+### Python 測試 (pytest)
+
 執行自動化測試：
 ```bash
 pytest test_main.py -v
@@ -65,6 +67,30 @@ pytest test_main.py -v
 - 不存在的帳號登入（應被拒絕）
 - 使用有效 Token 取得使用者資訊
 - 使用無效 Token（應被拒絕）
+
+### Hurl API 測試
+
+使用 Hurl 進行 HTTP API 測試：
+
+1. 安裝 Hurl：
+```bash
+# macOS
+brew install hurl
+
+# Linux
+curl --location --remote-name https://github.com/Orange-OpenSource/hurl/releases/download/4.3.0/hurl_4.3.0_amd64.deb
+sudo dpkg -i hurl_4.3.0_amd64.deb
+```
+
+2. 啟動伺服器：
+```bash
+python main.py
+```
+
+3. 執行 Hurl 測試：
+```bash
+hurl --test api-tests.hurl
+```
 
 ## CI/CD 流程
 
@@ -83,6 +109,10 @@ pytest test_main.py -v
 3. **自動化測試 (Run Tests)**
    - 執行所有測試案例
    - 生成測試覆蓋率報告
+
+4. **Hurl API 測試 (Hurl API Tests)**
+   - 使用 Hurl 執行 HTTP API 測試
+   - 驗證 API 端點行為和回應
 
 ### CI 工作流程說明
 
@@ -114,6 +144,10 @@ pip-audit -r requirements.txt
 
 # 執行測試
 pytest -v --cov=.
+
+# 執行 Hurl API 測試 (需要先啟動伺服器)
+# 在一個終端機執行：python main.py
+# 在另一個終端機執行：hurl --test api-tests.hurl
 ```
 
 ## 注意事項
