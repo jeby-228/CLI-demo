@@ -151,3 +151,9 @@ Desktop.ini
 *.tmp
 *.bak
 *.temp
+
+# GCP and deployment files
+key.json
+*.deb
+gcp-key.json
+service-account-key.json

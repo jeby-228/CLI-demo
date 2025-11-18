@@ -133,6 +133,37 @@ hurl --test --verbose test_api_docker.hurl
 - ✓ 使用無效 Token（應被拒絕）
 - ✓ 不提供 Token（應被拒絕）
 
+## CI/CD 與部署
+
+本專案已設定 GitHub Actions 自動化部署到 Google Cloud Platform (GCP) Cloud Run。
+
+### 功能特點
+
+- ✅ 自動化測試（Python + Hurl）
+- ✅ Docker 映像建構
+- ✅ 推送到 Google Artifact Registry
+- ✅ 自動部署到 Cloud Run
+- ✅ Pull Request 自動測試
+
+### 部署到 GCP
+
+詳細的 GCP CI/CD 設定指南，請參閱 [GCP_DEPLOYMENT.md](GCP_DEPLOYMENT.md)。
+
+快速開始：
+
+1. **在 GCP 建立專案並啟用 API**
+2. **建立服務帳號並取得金鑰**
+3. **在 GitHub 設定 Secrets**：
+   - `GCP_PROJECT_ID`: 你的 GCP 專案 ID
+   - `GCP_SA_KEY`: 服務帳號的 JSON 金鑰
+   - `SECRET_KEY`: JWT 密鑰
+4. **推送到 main 分支即可自動部署**
+
+### 工作流程
+
+- **Pull Request**: 自動執行所有測試
+- **Push to main**: 執行測試 → 建構 Docker 映像 → 部署到 Cloud Run
+
 ## 注意事項
 
 - 這是示範程式碼，SECRET_KEY 應在正式環境中更換
