@@ -54,7 +54,7 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
             raise HTTPException(status_code=401, detail="無效的認證憑證")
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token 已過期")
-    except jwt.JWTError:
+    except (jwt.DecodeError, jwt.InvalidTokenError, Exception):
         raise HTTPException(status_code=401, detail="無效的認證憑證")
     
     user = fake_users_db.get(username)
