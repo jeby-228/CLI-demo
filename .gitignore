@@ -7,6 +7,11 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
 .Python
 build/
 develop-eggs/
@@ -136,6 +141,24 @@ dmypy.json
 cython_debug/
 
 # IDEs and Editors
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+env/
+
+# Testing
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+*.cover
+.hypothesis/
+
+# IDE
 .vscode/
 .idea/
 *.swp
@@ -157,3 +180,10 @@ key.json
 *.deb
 gcp-key.json
 service-account-key.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Reports
+bandit-report.json
